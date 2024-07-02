@@ -3,7 +3,7 @@ package com.emily.infrastructure.redis;
 import com.emily.infrastructure.redis.connection.JedisDbConnectionConfiguration;
 import com.emily.infrastructure.redis.connection.LettuceDbConnectionConfiguration;
 import com.emily.infrastructure.redis.connection.PropertiesRedisDbConnectionDetails;
-import com.emily.infrastructure.redis.utils.BeanFactoryUtils;
+import com.emily.infrastructure.redis.factory.BeanFactoryProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -44,12 +44,11 @@ import static com.emily.infrastructure.redis.common.SerializationUtils.stringSer
 @Import({LettuceDbConnectionConfiguration.class, JedisDbConnectionConfiguration.class})
 public class RedisDbAutoConfiguration implements InitializingBean, DisposableBean {
 
-    private static final Logger logger = LoggerFactory.getLogger(RedisDbAutoConfiguration.class);
     private final RedisDbProperties redisDbProperties;
 
     public RedisDbAutoConfiguration(DefaultListableBeanFactory defaultListableBeanFactory, RedisDbProperties redisDbProperties) {
+        BeanFactoryProvider.registerDefaultListableBeanFactory(defaultListableBeanFactory);
         this.redisDbProperties = redisDbProperties;
-        BeanFactoryUtils.setDefaultListableBeanFactory(defaultListableBeanFactory);
     }
 
     @Bean
@@ -60,11 +59,11 @@ public class RedisDbAutoConfiguration implements InitializingBean, DisposableBea
         for (Map.Entry<String, RedisProperties> entry : redisDbProperties.getConfig().entrySet()) {
             String key = entry.getKey();
             RedisProperties properties = entry.getValue();
-            PropertiesRedisDbConnectionDetails propertiesRedisDbConnectionDetails = new PropertiesRedisDbConnectionDetails(properties);
             if (defaultConfig.equals(key)) {
-                redisConnectionDetails = propertiesRedisDbConnectionDetails;
+                redisConnectionDetails = new PropertiesRedisDbConnectionDetails(properties);
+                BeanFactoryProvider.registerSingleton(join(key, REDIS_CONNECT_DETAILS), redisConnectionDetails);
             } else {
-                BeanFactoryUtils.registerSingleton(join(key, REDIS_CONNECT_DETAILS), propertiesRedisDbConnectionDetails);
+                BeanFactoryProvider.registerSingleton(join(key, REDIS_CONNECT_DETAILS), new PropertiesRedisDbConnectionDetails(properties));
             }
         }
         return redisConnectionDetails;
@@ -86,10 +85,10 @@ public class RedisDbAutoConfiguration implements InitializingBean, DisposableBea
                 template.setConnectionFactory(redisConnectionFactory);
                 redisTemplate = template;
             } else {
-                template.setConnectionFactory(BeanFactoryUtils.getBean(join(key, REDIS_CONNECTION_FACTORY), RedisConnectionFactory.class));
+                template.setConnectionFactory(BeanFactoryProvider.getBean(join(key, REDIS_CONNECTION_FACTORY), RedisConnectionFactory.class));
                 template.afterPropertiesSet();
-                BeanFactoryUtils.registerSingleton(join(key, REDIS_TEMPLATE), template);
             }
+            BeanFactoryProvider.registerSingleton(join(key, REDIS_TEMPLATE), template);
         }
 
         return redisTemplate;
@@ -111,10 +110,10 @@ public class RedisDbAutoConfiguration implements InitializingBean, DisposableBea
                 template.setConnectionFactory(redisConnectionFactory);
                 stringRedisTemplate = template;
             } else {
-                template.setConnectionFactory(BeanFactoryUtils.getBean(join(key, REDIS_CONNECTION_FACTORY), RedisConnectionFactory.class));
+                template.setConnectionFactory(BeanFactoryProvider.getBean(join(key, REDIS_CONNECTION_FACTORY), RedisConnectionFactory.class));
                 template.afterPropertiesSet();
-                BeanFactoryUtils.registerSingleton(join(key, STRING_REDIS_TEMPLATE), template);
             }
+            BeanFactoryProvider.registerSingleton(join(key, STRING_REDIS_TEMPLATE), template);
         }
 
         return stringRedisTemplate;
@@ -123,11 +122,15 @@ public class RedisDbAutoConfiguration implements InitializingBean, DisposableBea
 
     @Override
     public void destroy() {
-        logger.info("<== 【销毁--自动化配置】----Redis数据库多数据源组件【RedisDbAutoConfiguration】");
+        LogHolder.LOG.info("<== 【销毁--自动化配置】----Redis数据库多数据源组件【RedisDbAutoConfiguration】");
     }
 
     @Override
     public void afterPropertiesSet() {
-        logger.info("==> 【初始化--自动化配置】----Redis数据库多数据源组件【RedisDbAutoConfiguration】");
+        LogHolder.LOG.info("==> 【初始化--自动化配置】----Redis数据库多数据源组件【RedisDbAutoConfiguration】");
+    }
+
+    private static class LogHolder {
+        private static final Logger LOG = LoggerFactory.getLogger(RedisDbAutoConfiguration.class);
     }
 }
