@@ -30,7 +30,7 @@ import java.util.Optional;
  * @author :  Emily
  * @since :  2024/1/1 9:47 AM
  */
-public class DefaultLoggerBeanFactory {
+public class DefaultLogbackBeanFactory {
     private static final List<AbstractRollingPolicy> POLICIES = new ArrayList<>(3);
     private static final List<AbstractLogback> LOGGERS = new ArrayList<>(3);
     private static final List<LogbackPatternLayoutEncoder> ENCODERS = new ArrayList<>(1);
