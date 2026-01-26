@@ -6,7 +6,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.ConsoleAppender;
 import com.emily.infrastructure.logback.LogbackProperties;
-import com.emily.infrastructure.logback.configuration.context.DefaultLogbackBeanFactory;
+import com.emily.infrastructure.logback.factory.DefaultLogbackBeanFactory;
 
 /**
  * 通过名字和级别设置Appender

@@ -9,7 +9,7 @@ import com.emily.infrastructure.logback.LogbackProperties;
 import com.emily.infrastructure.logback.common.CommonKeys;
 import com.emily.infrastructure.logback.common.PathUtils;
 import com.emily.infrastructure.logback.common.StrUtils;
-import com.emily.infrastructure.logback.configuration.context.DefaultLogbackBeanFactory;
+import com.emily.infrastructure.logback.factory.DefaultLogbackBeanFactory;
 import com.emily.infrastructure.logback.configuration.type.LogbackType;
 import com.emily.infrastructure.logback.entity.LogRollingPolicy;
 

@@ -6,7 +6,7 @@ import com.emily.infrastructure.logback.common.CommonKeys;
 import com.emily.infrastructure.logback.common.CommonNames;
 import com.emily.infrastructure.logback.common.PathUtils;
 import com.emily.infrastructure.logback.configuration.context.ConfigurationAction;
-import com.emily.infrastructure.logback.configuration.context.DefaultLogbackBeanFactory;
+import com.emily.infrastructure.logback.factory.DefaultLogbackBeanFactory;
 import com.emily.infrastructure.logback.configuration.type.LogbackType;
 import org.slf4j.Logger;
 
@@ -95,14 +95,10 @@ public class ContextServiceProvider implements ContextProvider {
         Logger logger = LOGGER.get(commonKeys.getLoggerName());
         if (logger == null) {
             synchronized (ContextServiceProvider.class) {
-                if (logger == null) {
-                    // 获取logger日志对象
-                    logger = DefaultLogbackBeanFactory.getLogger(commonKeys);
-                    // 存入缓存
-                    LOGGER.putIfAbsent(commonKeys.getLoggerName(), logger);
-                } else {
-                    logger = LOGGER.get(commonKeys.getLoggerName());
-                }
+                // 获取logger日志对象
+                logger = DefaultLogbackBeanFactory.getLogger(commonKeys);
+                // 存入缓存
+                LOGGER.putIfAbsent(commonKeys.getLoggerName(), logger);
             }
         }
         return logger;

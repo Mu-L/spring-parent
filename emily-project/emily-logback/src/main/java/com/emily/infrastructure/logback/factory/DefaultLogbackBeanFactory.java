@@ -1,4 +1,4 @@
-package com.emily.infrastructure.logback.configuration.context;
+package com.emily.infrastructure.logback.factory;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
