@@ -30,7 +30,7 @@ import java.util.Optional;
  * @author :  Emily
  * @since :  2024/1/1 9:47 AM
  */
-public class LogbackBeanFactory {
+public class DefaultLoggerBeanFactory {
     private static final List<AbstractRollingPolicy> POLICIES = new ArrayList<>(3);
     private static final List<AbstractLogback> LOGGERS = new ArrayList<>(3);
     private static final List<LogbackPatternLayoutEncoder> ENCODERS = new ArrayList<>(1);
@@ -87,15 +87,13 @@ public class LogbackBeanFactory {
      * @return 编码器对象
      */
     public static PatternLayoutEncoder getEncoder(String pattern) {
-        return ENCODERS.get(0).getEncoder(pattern);
+        return ENCODERS.getFirst().getEncoder(pattern);
     }
 
     /**
      * 获取Filter对象
-     *
-     * @return
      */
     public static LogbackFilter getFilter() {
-        return FILTERS.get(0);
+        return FILTERS.getFirst();
     }
 }
