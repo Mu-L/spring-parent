@@ -5,6 +5,7 @@ import ch.qos.logback.core.spi.ContextAwareBase;
 import ch.qos.logback.core.status.OnConsoleStatusListener;
 import ch.qos.logback.core.util.StatusListenerConfigHelper;
 import ch.qos.logback.core.util.StatusPrinter;
+import ch.qos.logback.core.util.StatusPrinter2;
 import com.emily.infrastructure.logback.LogbackProperties;
 
 /**
@@ -20,6 +21,7 @@ import com.emily.infrastructure.logback.LogbackProperties;
  * @since :  Created in 2023/7/15 5:32 PM
  */
 public class ConfigurationAction extends ContextAwareBase {
+    private final static StatusPrinter2 SINGLETON = new StatusPrinter2();
     static final String DEBUG_SYSTEM_PROPERTY_KEY = "logback.debug";
     static final String INTERNAL_DEBUG_ATTR = "debug";
     static final String SCAN_ATTR = "scan";
@@ -39,17 +41,13 @@ public class ConfigurationAction extends ContextAwareBase {
     public void start() {
         if (Boolean.getBoolean(DEBUG_SYSTEM_PROPERTY_KEY) || Boolean.getBoolean(INTERNAL_DEBUG_ATTR) || properties.isDebug()) {
             //是否报告logback内部状态信息
-            StatusPrinter.print(context);
+            SINGLETON.print(context);
             //开启内部debug模式
             StatusListenerConfigHelper.addOnConsoleListenerInstance(context, new OnConsoleStatusListener());
         } else {
             addInfo(INTERNAL_DEBUG_ATTR + " attribute not set");
         }
-        if (properties.isPackagingData()) {
-            ((LoggerContext) context).setPackagingDataEnabled(true);
-        } else {
-            ((LoggerContext) context).setPackagingDataEnabled(false);
-        }
+        ((LoggerContext) context).setPackagingDataEnabled(properties.isPackagingData());
     }
 
 }

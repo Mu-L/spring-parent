@@ -11,6 +11,7 @@ import com.emily.infrastructure.logback.common.PathUtils;
 import com.emily.infrastructure.logback.common.StrUtils;
 import com.emily.infrastructure.logback.configuration.context.LogbackBeanFactory;
 import com.emily.infrastructure.logback.configuration.type.LogbackType;
+import com.emily.infrastructure.logback.entity.LogRollingPolicy;
 
 import java.io.File;
 import java.text.MessageFormat;
@@ -54,7 +55,7 @@ public class LogbackRollingFileAppender extends AbstractAppender {
     @Override
     protected Appender<ILoggingEvent> getAppender(Level level) {
         //归档策略属性配置
-        LogbackProperties.RollingPolicy rp = properties.getAppender().getRollingPolicy();
+        LogRollingPolicy rp = properties.getAppender().getRollingPolicy();
         //日志文件路径
         String loggerPath = this.resolveFilePath(level);
         //这里是可以用来设置appender的，在xml配置文件里面，是这种形式：

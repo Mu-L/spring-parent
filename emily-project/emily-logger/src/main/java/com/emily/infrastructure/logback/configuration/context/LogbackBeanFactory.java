@@ -17,6 +17,7 @@ import com.emily.infrastructure.logback.configuration.policy.AbstractRollingPoli
 import com.emily.infrastructure.logback.configuration.policy.LogbackFixedWindowRollingPolicy;
 import com.emily.infrastructure.logback.configuration.policy.LogbackSizeAndTimeBasedRollingPolicy;
 import com.emily.infrastructure.logback.configuration.policy.LogbackTimeBasedRollingPolicy;
+import com.emily.infrastructure.logback.entity.LogRollingPolicy;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ public class LogbackBeanFactory {
      * @param rollingPolicy 滚动策略对象
      * @return 滚动策略对象
      */
-    public static RollingPolicy getRollingPolicy(RollingFileAppender<ILoggingEvent> appender, String loggerPath, LogbackProperties.RollingPolicy rollingPolicy) {
+    public static RollingPolicy getRollingPolicy(RollingFileAppender<ILoggingEvent> appender, String loggerPath, LogRollingPolicy rollingPolicy) {
         Optional<AbstractRollingPolicy> policy = POLICIES.stream().filter(l -> l.support(rollingPolicy.getType())).findFirst();
         if (policy.isPresent()) {
             return policy.get().getRollingPolicy(appender, loggerPath);
