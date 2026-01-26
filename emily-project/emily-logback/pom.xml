@@ -8,9 +8,9 @@
         <relativePath>../../emily-project/pom.xml</relativePath>
     </parent>
 
-    <artifactId>emily-logger</artifactId>
+    <artifactId>emily-logback</artifactId>
     <packaging>jar</packaging>
-    <name>emily-logger</name>
+    <name>emily-logback</name>
     <description>Java通用日志组件SDK</description>
     <url>https://github.com/mingyang66/spring-parent</url>
 
