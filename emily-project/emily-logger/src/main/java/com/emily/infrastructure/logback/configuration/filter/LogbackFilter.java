@@ -40,7 +40,7 @@ public class LogbackFilter {
         //不符合条件的日志拒绝
         filter.setOnMismatch(FilterReply.DENY);
         //添加内部状态信息
-        filter.addError("Build LevelFilter Success");
+        filter.addInfo("Build LevelFilter Success");
         //标记为启用状态
         filter.start();
         return filter;
@@ -86,7 +86,7 @@ public class LogbackFilter {
         //不符合条件的日志拒绝
         filter.setOnMismatch(FilterReply.DENY.name());
         //添加内部状态信息
-        filter.addError("Build AcceptMarkerFilter Success");
+        filter.addInfo("Build AcceptMarkerFilter Success");
         //标记为启用状态
         filter.start();
         return filter;
@@ -111,7 +111,7 @@ public class LogbackFilter {
         //不符合条件的日志拒绝
         filter.setOnMismatch(FilterReply.ACCEPT.name());
         //添加内部状态信息
-        filter.addError("Build DenyMarkerFilter Success");
+        filter.addInfo("Build DenyMarkerFilter Success");
         //标记为启用状态
         filter.start();
         return filter;
